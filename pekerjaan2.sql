@@ -88,3 +88,23 @@ FROM `purchase_orders` po
 JOIN `purchase_order_details` pod ON po.id = pod.purchase_order_id
 JOIN `products` p ON pod.product_id = p.id
 WHERE p.id = 2;
+
+-- Event Scheduler
+SET GLOBAL event_scheduler = ON;
+USE `northwind`;
+
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS `evt_jadwal_pesan_ulang`
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    -- Panggil procedure yang sudah kita buat
+    CALL `sp_pesan_ulang_otomatis`();
+END //
+
+DELIMITER ;
+
+-- Melihat daftar event scheduler
+SHOW EVENTS FROM `northwind`;
