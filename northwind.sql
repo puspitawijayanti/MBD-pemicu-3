@@ -199,28 +199,3 @@ ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
--- [BAGIAN 2: TRIGGER UNTUK PEMICU 3] --
-
-DELIMITER //
-CREATE TRIGGER `northwind`.`trg_kurangi_stok`
-AFTER INSERT ON `northwind`.`order_details`
-FOR EACH ROW
-BEGIN
-    UPDATE `northwind`.`products`
-    SET `stock` = `stock` - NEW.quantity
-    WHERE `id` = NEW.product_id;
-END //
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER `northwind`.`trg_tambah_stok`
-AFTER INSERT ON `northwind`.`purchase_order_details`
-FOR EACH ROW
-BEGIN
-    UPDATE `northwind`.`products`
-    SET `stock` = `stock` + NEW.quantity
-    WHERE `id` = NEW.product_id;
-END //
-DELIMITER ;
